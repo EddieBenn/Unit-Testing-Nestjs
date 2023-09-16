@@ -9,10 +9,12 @@ describe('PaymentsController', () => {
     query: {},
   } as unknown as Request;
 
+  const statusResponseMock = {
+    send: jest.fn((x) => x),
+  };
+
   const responseMock = {
-    status: jest.fn((x) => ({
-      send: jest.fn((y) => y),
-    })),
+    status: jest.fn((x) => statusResponseMock),
     send: jest.fn((x) => x),
   } as unknown as Response;
 
@@ -32,6 +34,17 @@ describe('PaymentsController', () => {
     it('should return status of 400', () => {
       controller.getPayments(requestMock, responseMock);
       expect(responseMock.status).toHaveBeenCalledWith(400);
+      expect(statusResponseMock.send).toHaveBeenCalledWith({
+        message: 'Missing count or page query parameter',
+      });
+    });
+    it('should return statusCode of 200 when query params are present', () => {
+      requestMock.query = {
+        count: '10',
+        page: '1',
+      };
+      controller.getPayments(requestMock, responseMock);
+      expect(responseMock.send).toHaveBeenCalledWith(200);
     });
   });
 });
