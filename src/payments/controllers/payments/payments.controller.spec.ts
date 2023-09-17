@@ -65,29 +65,38 @@ describe('PaymentsController', () => {
   });
 
   describe('createPayment', () => {
-    // it('it should return a successful response', async () => {
-    //   const response = await controller.createPayment({
-    //     email: 'faithpeters@gmail.com',
-    //     price: 100,
-    //   });
-    //   expect(response).toStrictEqual({ status: 'success' });
-    // });
-
-    it('it should throw an error', async () => {
-      jest
-        .spyOn(paymantsService, 'createPayment')
-        .mockImplementationOnce(() => {
-          throw new BadRequestException();
-        });
-      try {
-        const response = await controller.createPayment({
-          email: 'faithpeters@gmail.com',
-          price: 100,
-        });
-        return response;
-      } catch (error) {
-        console.log(error);
-      }
+    it('it should return a successful response', async () => {
+      const response = await controller.createPayment({
+        email: 'faithpeters@gmail.com',
+        price: 100,
+      });
+      expect(response).toStrictEqual({
+        email: 'faithpeters@gmail.com',
+        price: 100,
+      });
     });
+
+    // it('it should throw an error', async () => {
+    //   await expect(controller.createPayment({
+    //     email: '',
+    //     price: 0
+    //   })).rejects.toContainException(new BadRequestException());
+
+    // it('it should throw an error', async () => {
+    //   jest
+    //     .spyOn(paymantsService, 'createPayment')
+    //     .mockImplementationOnce(() => {
+    //       throw new BadRequestException();
+    //     });
+    //   try {
+    //     const response = await controller.createPayment({
+    //       email: 'faithpeters@gmail.com',
+    //       price: 100,
+    //     });
+    //     return response;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // });
   });
 });

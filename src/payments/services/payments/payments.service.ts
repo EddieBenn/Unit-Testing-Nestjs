@@ -19,9 +19,7 @@ export class PaymentsService {
     const user = this.users.find((user) => user.email === email);
 
     if (user) {
-      return {
-        status: 'success',
-      };
+      return user;
     } else {
       throw new BadRequestException();
     }
