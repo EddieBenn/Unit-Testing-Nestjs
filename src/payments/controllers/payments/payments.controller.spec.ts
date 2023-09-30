@@ -3,6 +3,7 @@ import { PaymentsController } from './payments.controller';
 import { Request, Response } from 'express';
 import { PaymentsService } from 'src/payments/services/payments/payments.service';
 import { BadRequestException } from '@nestjs/common';
+import { CreatePaymentDto } from '../../dto/createPayment.dto';
 
 describe('PaymentsController', () => {
   let controller: PaymentsController;
@@ -82,21 +83,18 @@ describe('PaymentsController', () => {
     //     price: 0
     //   })).rejects.toContainException(new BadRequestException());
 
-    // it('it should throw an error', async () => {
-    //   jest
-    //     .spyOn(paymantsService, 'createPayment')
-    //     .mockImplementationOnce(() => {
-    //       throw new BadRequestException();
-    //     });
-    //   try {
-    //     const response = await controller.createPayment({
-    //       email: 'faithpeters@gmail.com',
-    //       price: 100,
-    //     });
-    //     return response;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // });
+    it('it should throw an error', async () => {
+      const mockCreatePayment = new CreatePaymentDto();
+      mockCreatePayment.email = '';
+      jest
+        .spyOn(paymantsService, 'createPayment')
+        .mockRejectedValue(new BadRequestException('user not found'));
+      try {
+        await controller.createPayment(mockCreatePayment);
+      } catch (error) {
+        expect(error.message).toBe('user not found');
+        expect(error).toBeInstanceOf(BadRequestException);
+      }
+    });
   });
 });
